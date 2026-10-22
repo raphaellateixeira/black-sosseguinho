@@ -334,7 +334,18 @@ document.getElementById('telefone').addEventListener('input', function(e){
 });
 
 // ---------- envio ----------
-var GRUPO = 'https://chat.whatsapp.com/Js6d3xeokaiBVr7aYExyVr?s=cl&p=a&mlu=4&ilr=4';
+var GRUPO   = 'https://chat.whatsapp.com/Js6d3xeokaiBVr7aYExyVr?s=cl&p=a&mlu=4&ilr=4';
+var WEBHOOK = 'https://n8n.agenciaultima.com.br/webhook/f828df7b-0260-4d65-90b5-c3fb45229bc8';
+
+// nao espera mais que isso para redirecionar a pessoa ao grupo
+var TIMEOUT_MS = 4000;
+
+function comTimeout(p){
+  return Promise.race([
+    p.catch(function(){}),
+    new Promise(function(r){ setTimeout(r, TIMEOUT_MS); })
+  ]);
+}
 
 document.getElementById('form').addEventListener('submit', function(ev){
   ev.preventDefault();
@@ -351,12 +362,39 @@ document.getElementById('form').addEventListener('submit', function(ev){
   btn.disabled = true;
   btn.textContent = 'Entrando...';
 
-  fetch('/', {
+  function v(id){ var e = document.getElementById(id); return e ? e.value : ''; }
+
+  var lead = {
+    nome:          v('nome').trim(),
+    email:         v('email').trim().toLowerCase(),
+    telefone:      tel,                               // so digitos: 31992712471
+    telefone_e164: '+55' + tel,                       // +5531992712471
+    utm_source:    v('utm_source'),
+    utm_medium:    v('utm_medium'),
+    utm_campaign:  v('utm_campaign'),
+    utm_content:   v('utm_content'),
+    utm_term:      v('utm_term'),
+    referrer:      v('referrer'),
+    landing_url:   v('landing_url'),
+    origem:        'lp-black-sosseguinho',
+    enviado_em:    new Date().toISOString()
+  };
+
+  // 1) n8n (principal). O webhook ja responde com CORS, entao vai como JSON.
+  var pN8N = fetch(WEBHOOK, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(lead)
+  });
+
+  // 2) Netlify Forms (backup, caso o n8n esteja fora do ar)
+  var pNetlify = fetch('/', {
     method: 'POST',
     headers: {'Content-Type':'application/x-www-form-urlencoded'},
     body: new URLSearchParams(new FormData(form)).toString()
-  })
-  .catch(function(){ /* preview sem backend: segue mesmo assim */ })
+  });
+
+  comTimeout(Promise.allSettled([pN8N, pNetlify]))
   .then(function(){
     if (window.fbq)  fbq('track','Lead');
     if (window.gtag) gtag('event','generate_lead');
