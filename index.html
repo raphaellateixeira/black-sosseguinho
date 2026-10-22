@@ -364,20 +364,20 @@ document.getElementById('form').addEventListener('submit', function(ev){
 
   function v(id){ var e = document.getElementById(id); return e ? e.value : ''; }
 
+  // Nomes alinhados com o no Google Sheets do n8n: Email, phone, utm_*
   var lead = {
-    nome:          v('nome').trim(),
-    email:         v('email').trim().toLowerCase(),
-    telefone:      tel,                               // so digitos: 31992712471
-    telefone_e164: '+55' + tel,                       // +5531992712471
-    utm_source:    v('utm_source'),
-    utm_medium:    v('utm_medium'),
-    utm_campaign:  v('utm_campaign'),
-    utm_content:   v('utm_content'),
-    utm_term:      v('utm_term'),
-    referrer:      v('referrer'),
-    landing_url:   v('landing_url'),
-    origem:        'lp-black-sosseguinho',
-    enviado_em:    new Date().toISOString()
+    Nome:         v('nome').trim(),
+    Email:        v('email').trim().toLowerCase(),
+    phone:        tel,                                // so digitos: 31992712471
+    phone_e164:   '+55' + tel,                        // +5531992712471
+    utm_source:   v('utm_source'),
+    utm_medium:   v('utm_medium'),
+    utm_campaign: v('utm_campaign'),
+    utm_content:  v('utm_content'),
+    utm_term:     v('utm_term'),
+    referrer:     v('referrer'),
+    landing_url:  v('landing_url'),
+    origem:       'lp-black-sosseguinho'
   };
 
   // 1) n8n (principal). O webhook ja responde com CORS, entao vai como JSON.
