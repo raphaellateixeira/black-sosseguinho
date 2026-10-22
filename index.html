@@ -25,17 +25,25 @@
 <style>
 :root{
   color-scheme: light;
-  /* Trocar por tokens da marca quando a Renata mandar o manual */
-  --creme:#FBF6EF;
-  --creme-2:#F4EBDF;
+  /* Paleta extraida de sono.sosseguinho.com.br */
+  --turquesa:#70E5DD;      /* cor principal da marca */
+  --turquesa-claro:#EAF9F8;
+  --magenta:#C81C86;       /* CTA */
+  --magenta-escuro:#A61570;
+  --roxo:#615B9B;          /* o "black" da campanha */
+  --roxo-claro:#7A74B5;
+  --rosa:#E598BA;
+
+  --creme:#FFFFFF;         /* fundo geral */
+  --creme-2:var(--turquesa-claro);
   --branco:#FFFFFF;
-  --tinta:#2B2722;
-  --tinta-suave:#6E655A;
-  --noite:#27314F;        /* o "black" da campanha, sem ser preto */
-  --noite-claro:#3B4876;
-  --ambar:#E6A52E;
-  --ambar-escuro:#C98A1C;
-  --borda:#E6DACA;
+  --tinta:#191C1F;
+  --tinta-suave:#5A616C;
+  --noite:var(--roxo);
+  --noite-claro:var(--roxo-claro);
+  --ambar:var(--magenta);
+  --ambar-escuro:var(--magenta-escuro);
+  --borda:#D5EDEB;
   --max:600px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -57,12 +65,12 @@ p+p{margin-top:14px}
 
 /* ---------- barra topo ---------- */
 .bar{
-  background:var(--noite);color:var(--creme);
+  background:var(--noite);color:#fff;border-bottom:4px solid var(--turquesa);
   display:flex;flex-wrap:wrap;gap:4px 12px;justify-content:center;align-items:center;
   padding:11px 16px;text-align:center;
 }
 .bar b{font-family:Fraunces,serif;font-weight:700;font-size:15px;letter-spacing:.02em}
-.bar span{font-size:13px;color:#C3CBE4;letter-spacing:.04em}
+.bar span{font-size:13px;color:#D6D3EA;letter-spacing:.04em}
 
 /* ---------- hero ---------- */
 .hero{background:var(--creme-2);padding:30px 0 40px;border-bottom:1px solid var(--borda)}
@@ -107,7 +115,7 @@ input:focus{outline:2px solid var(--noite);outline-offset:1px;border-color:trans
 /* ---------- botao ---------- */
 .btn{
   display:block;width:100%;border:0;cursor:pointer;
-  background:var(--ambar);color:#2B2003;
+  background:var(--ambar);color:#fff;
   font-family:Inter,sans-serif;font-size:16.5px;font-weight:700;letter-spacing:.01em;
   padding:16px 18px;border-radius:11px;text-align:center;text-decoration:none;
   transition:background .15s ease,transform .12s ease;
@@ -127,7 +135,7 @@ input:focus{outline:2px solid var(--noite);outline-offset:1px;border-color:trans
   background:var(--branco);border:1px solid var(--borda);border-radius:10px;
   padding:13px 15px;font-weight:500;display:flex;align-items:center;gap:11px;
 }
-.temas li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ambar);flex:0 0 auto}
+.temas li::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--turquesa);flex:0 0 auto}
 .passos{list-style:none;counter-reset:p;display:grid;gap:14px;margin-top:18px}
 .passos li{counter-increment:p;display:flex;gap:13px;align-items:flex-start}
 .passos li::before{
@@ -183,7 +191,11 @@ footer{padding:30px 0 40px;text-align:center;font-size:13px;color:var(--tinta-su
     <h1>Pela primeira vez, tudo o que eu ensino numa <em>oferta só</em>.</h1>
 
     <p class="promessa">
-      Sono, desmame, desfralde, disciplina e amamentação juntos.
+      Nesta Black Friday, uma oportunidade especial para você fazer seu bebê dormir a noite
+      toda e atravessar cada fase que vem depois: desmame, desfralde e disciplina.
+      Sem deixar chorando e sem rotina rígida.
+    </p>
+    <p class="promessa">
       <strong>Eu nunca fiz uma Black Friday.</strong> Esse ano eu vou fazer a primeira.
     </p>
 
@@ -197,7 +209,7 @@ footer{padding:30px 0 40px;text-align:center;font-size:13px;color:var(--tinta-su
 
     <div class="form-card" id="cadastro">
       <h3>Entre no grupo da Black</h3>
-      <p class="nota">É gratuito. Eu só vou mandar a oferta para quem estiver na lista.</p>
+      <p class="nota">Entre gratuitamente no grupo de WhatsApp e receba em primeira mão todos os detalhes da oferta.</p>
 
       <form name="black-sosseguinho" method="POST" data-netlify="true" netlify-honeypot="empresa" id="form">
         <input type="hidden" name="form-name" value="black-sosseguinho">
