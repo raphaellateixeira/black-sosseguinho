@@ -16,34 +16,43 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<!-- ================================================================
-     PIXEL / GA4  —  colar aqui antes de subir
-     ================================================================ -->
-<!-- <script>!function(f,b,e,v,n,t,s){...}</script> META PIXEL -->
-<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXX"></script> GA4 -->
+<!-- ===================== META PIXEL ===================== -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','208929382793098');
+fbq('track','PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=208929382793098&ev=PageView&noscript=1"></noscript>
+
+<!-- GA4: colar o snippet aqui quando tiver o ID -->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXX"></script> -->
 
 <style>
 :root{
   color-scheme: light;
   /* Paleta extraida de sono.sosseguinho.com.br */
-  --turquesa:#70E5DD;      /* cor principal da marca */
-  --turquesa-claro:#EAF9F8;
-  --magenta:#C81C86;       /* CTA */
-  --magenta-escuro:#A61570;
-  --roxo:#615B9B;          /* o "black" da campanha */
-  --roxo-claro:#7A74B5;
-  --rosa:#E598BA;
+  --turquesa:#7BE0D8;      /* faixa do topo e blocos claros */
+  --turquesa-claro:#E8F9F7;
+  --teal:#0D9488;          /* bloco escuro, o "black" da campanha */
+  --teal-claro:#11A99B;
+  --magenta:#E91E63;       /* CTA */
+  --magenta-escuro:#C81C86;
 
   --creme:#FFFFFF;         /* fundo geral */
   --creme-2:var(--turquesa-claro);
   --branco:#FFFFFF;
-  --tinta:#191C1F;
+  --tinta:#1C1C1C;
   --tinta-suave:#5A616C;
-  --noite:var(--roxo);
-  --noite-claro:var(--roxo-claro);
+  --noite:var(--teal);
+  --noite-claro:var(--teal-claro);
   --ambar:var(--magenta);
   --ambar-escuro:var(--magenta-escuro);
-  --borda:#D5EDEB;
+  --borda:#CDEBE8;
   --max:600px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -65,12 +74,12 @@ p+p{margin-top:14px}
 
 /* ---------- barra topo ---------- */
 .bar{
-  background:var(--noite);color:#fff;border-bottom:4px solid var(--turquesa);
+  background:var(--turquesa);color:var(--tinta);
   display:flex;flex-wrap:wrap;gap:4px 12px;justify-content:center;align-items:center;
-  padding:11px 16px;text-align:center;
+  padding:12px 16px;text-align:center;
 }
 .bar b{font-family:Fraunces,serif;font-weight:700;font-size:15px;letter-spacing:.02em}
-.bar span{font-size:13px;color:#D6D3EA;letter-spacing:.04em}
+.bar span{font-size:13px;color:#14544E;letter-spacing:.04em}
 
 /* ---------- hero ---------- */
 .hero{background:var(--creme-2);padding:30px 0 40px;border-bottom:1px solid var(--borda)}
@@ -79,7 +88,7 @@ p+p{margin-top:14px}
   padding:6px 14px;font-size:11.5px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;
   margin-bottom:16px;
 }
-.hero h1 em{font-style:normal;color:var(--noite-claro)}
+.hero h1 em{font-style:normal;color:var(--magenta)}
 .promessa{margin-top:14px;font-size:1.03rem;color:var(--tinta-suave)}
 .promessa strong{color:var(--tinta);font-weight:600}
 
@@ -376,12 +385,25 @@ document.getElementById('form').addEventListener('submit', function(ev){
 
   function v(id){ var e = document.getElementById(id); return e ? e.value : ''; }
 
+  // id unico do evento: o Pixel e a CAPI usam o MESMO id para deduplicar
+  var eventId = 'lead-' + Date.now() + '-' + Math.random().toString(36).slice(2,10);
+
+  function cookie(n){
+    var m = document.cookie.match('(^|;)\\s*' + n + '\\s*=\\s*([^;]+)');
+    return m ? m.pop() : '';
+  }
+
   // Nomes alinhados com o no Google Sheets do n8n: Email, phone, utm_*
   var lead = {
     Nome:         v('nome').trim(),
     Email:        v('email').trim().toLowerCase(),
     phone:        tel,                                // so digitos: 31992712471
     phone_e164:   '+55' + tel,                        // +5531992712471
+    event_id:     eventId,                            // para deduplicar com a CAPI
+    fbp:          cookie('_fbp'),                     // cookie do Pixel
+    fbc:          cookie('_fbc'),                     // click id do anuncio
+    event_source_url: location.href,
+    user_agent:   navigator.userAgent,
     utm_source:   v('utm_source'),
     utm_medium:   v('utm_medium'),
     utm_campaign: v('utm_campaign'),
@@ -391,6 +413,11 @@ document.getElementById('form').addEventListener('submit', function(ev){
     landing_url:  v('landing_url'),
     origem:       'lp-black-sosseguinho'
   };
+
+  // Dispara o Lead JA, nao depois: assim o Pixel tem a janela inteira
+  // do timeout para concluir antes do redirecionamento para o grupo.
+  if (window.fbq)  fbq('track','Lead', {content_name:'Black Sosseguinho'}, {eventID: eventId});
+  if (window.gtag) gtag('event','generate_lead');
 
   // 1) n8n (principal). O webhook ja responde com CORS, entao vai como JSON.
   var pN8N = fetch(WEBHOOK, {
@@ -408,9 +435,6 @@ document.getElementById('form').addEventListener('submit', function(ev){
 
   comTimeout(Promise.allSettled([pN8N, pNetlify]))
   .then(function(){
-    if (window.fbq)  fbq('track','Lead');
-    if (window.gtag) gtag('event','generate_lead');
-
     if (GRUPO.indexOf('SUBSTITUIR') === -1) { window.location.href = GRUPO; return; }
 
     form.innerHTML = '<div style="text-align:center;padding:12px 0">'
