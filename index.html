@@ -358,8 +358,9 @@ document.getElementById('telefone').addEventListener('input', function(e){
 var GRUPO   = 'https://chat.whatsapp.com/Js6d3xeokaiBVr7aYExyVr?s=cl&p=a&mlu=4&ilr=4';
 var WEBHOOK = 'https://n8n.agenciaultima.com.br/webhook/f828df7b-0260-4d65-90b5-c3fb45229bc8';
 
-// nao espera mais que isso para redirecionar a pessoa ao grupo
-var TIMEOUT_MS = 4000;
+// Com keepalive o navegador conclui o envio mesmo com a pagina saindo,
+// entao nao precisa segurar a pessoa esperando.
+var TIMEOUT_MS = 1500;
 
 function comTimeout(p){
   return Promise.race([
@@ -420,17 +421,21 @@ document.getElementById('form').addEventListener('submit', function(ev){
   if (window.gtag) gtag('event','generate_lead');
 
   // 1) n8n (principal). O webhook ja responde com CORS, entao vai como JSON.
+  //    keepalive: sem ele, o redirecionamento para o grupo aborta a requisicao
+  //    no meio e o n8n recebe corpo vazio, gerando linha em branco na planilha.
   var pN8N = fetch(WEBHOOK, {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
-    body: JSON.stringify(lead)
+    body: JSON.stringify(lead),
+    keepalive: true
   });
 
   // 2) Netlify Forms (backup, caso o n8n esteja fora do ar)
   var pNetlify = fetch('/', {
     method: 'POST',
     headers: {'Content-Type':'application/x-www-form-urlencoded'},
-    body: new URLSearchParams(new FormData(form)).toString()
+    body: new URLSearchParams(new FormData(form)).toString(),
+    keepalive: true
   });
 
   comTimeout(Promise.allSettled([pN8N, pNetlify]))
