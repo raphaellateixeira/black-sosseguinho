@@ -93,10 +93,10 @@ p+p{margin-top:14px}
 .promessa{margin-top:14px;font-size:1.03rem;color:var(--tinta-suave)}
 .promessa strong{color:var(--tinta);font-weight:600}
 
-/* data */
+/* data: vive dentro do card do formulario, entao usa o fundo menta */
 .data{
-  display:flex;align-items:center;gap:12px;margin:20px 0 22px;
-  background:var(--branco);border:1px solid var(--borda);border-radius:13px;padding:13px 16px;
+  display:flex;align-items:center;gap:12px;margin:12px 0 20px;
+  background:var(--turquesa-claro);border:1px solid var(--borda);border-radius:13px;padding:13px 16px;
 }
 .data .num{font-family:Fraunces,serif;font-size:1.9rem;line-height:1;color:var(--noite)}
 .data .txt{font-size:13.5px;line-height:1.35;color:var(--tinta-suave)}
@@ -210,17 +210,16 @@ footer{padding:30px 0 40px;text-align:center;font-size:13px;color:var(--tinta-su
       <strong>Eu nunca fiz uma Black Friday.</strong> Esse ano eu vou fazer a primeira.
     </p>
 
-    <div class="data">
-      <div class="num">11/11</div>
-      <div class="txt">
-        <b>Eu revelo a oferta ao vivo</b>
-        Quem estiver no grupo recebe os detalhes em primeira mão.
-      </div>
-    </div>
-
     <div class="form-card" id="cadastro">
       <h3>Entre no grupo da Black</h3>
-      <p class="nota">Entre gratuitamente no grupo de WhatsApp e receba em primeira mão todos os detalhes da oferta.</p>
+
+      <div class="data">
+        <div class="num">11/11</div>
+        <div class="txt">
+          <b>Eu revelo a oferta ao vivo</b>
+          Quem estiver no grupo recebe os detalhes em primeira mão.
+        </div>
+      </div>
 
       <form name="black-sosseguinho" method="POST" data-netlify="true" netlify-honeypot="empresa" id="form">
         <input type="hidden" name="form-name" value="black-sosseguinho">
