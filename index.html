@@ -83,8 +83,9 @@ p+p{margin-top:14px}
 
 /* ---------- hero ---------- */
 .hero{background:var(--creme-2);padding:30px 0 40px;border-bottom:1px solid var(--borda)}
+/* no mobile o selo some: a barra do topo ja diz que e a Black */
 .selo{
-  display:inline-block;background:var(--noite);color:#fff;border-radius:999px;
+  display:none;background:var(--noite);color:#fff;border-radius:999px;
   padding:6px 14px;font-size:11.5px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;
   margin-bottom:16px;
 }
@@ -166,6 +167,7 @@ footer{padding:30px 0 40px;text-align:center;font-size:13px;color:var(--tinta-su
   .hero{padding:40px 0 52px}
   .temas{grid-template-columns:1fr 1fr}
   .form-card{padding:28px 26px}
+  .selo{display:inline-block}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 
