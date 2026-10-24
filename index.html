@@ -67,7 +67,7 @@ body{
 .wrap{width:100%;max-width:var(--max);margin:0 auto;padding:0 16px}
 section{padding:48px 0}
 h1,h2,.display{font-family:Fraunces,Georgia,serif;font-weight:600;line-height:1.15;letter-spacing:-.01em}
-h1{font-size:clamp(1.85rem,7.2vw,2.6rem)}
+h1{font-size:clamp(1.58rem,6.6vw,2.6rem)}
 h2{font-size:clamp(1.4rem,5.2vw,1.9rem);margin-bottom:14px}
 p+p{margin-top:14px}
 .dim{color:var(--tinta-suave)}
@@ -82,7 +82,13 @@ p+p{margin-top:14px}
 .bar span{font-size:13px;color:#14544E;letter-spacing:.04em}
 
 /* ---------- hero ---------- */
-.hero{background:var(--creme-2);padding:30px 0 40px;border-bottom:1px solid var(--borda)}
+.hero{background:var(--creme-2);padding:14px 0 30px;border-bottom:1px solid var(--borda)}
+/* no mobile o formulario sobe: a frase "Eu nunca fiz..." vai para depois dele */
+.hero .wrap{display:flex;flex-direction:column}
+.hero h1{order:1}
+.promessa{order:2}
+.form-card{order:3}
+.promessa-depois{order:4;margin-top:18px}
 /* no mobile o selo some: a barra do topo ja diz que e a Black */
 .selo{
   display:none;background:var(--noite);color:#fff;border-radius:999px;
@@ -90,13 +96,12 @@ p+p{margin-top:14px}
   margin-bottom:16px;
 }
 .hero h1 em{font-style:normal;color:var(--magenta)}
-.promessa{margin-top:14px;font-size:1.03rem;color:var(--tinta-suave)}
+.promessa{margin-top:12px;font-size:.98rem;color:var(--tinta-suave)}
 .promessa strong{color:var(--tinta);font-weight:600}
 
 /* data: vive dentro do card do formulario, entao usa o fundo menta */
-.data{
-  display:flex;align-items:center;gap:12px;margin:12px 0 20px;
-  background:var(--turquesa-claro);border:1px solid var(--borda);border-radius:13px;padding:13px 16px;
+.data{  display:flex;align-items:center;gap:11px;margin:10px 0 16px;
+  background:var(--turquesa-claro);border:1px solid var(--borda);border-radius:12px;padding:11px 14px;
 }
 .data .num{font-family:Fraunces,serif;font-size:1.9rem;line-height:1;color:var(--noite)}
 .data .txt{font-size:13.5px;line-height:1.35;color:var(--tinta-suave)}
@@ -105,19 +110,19 @@ p+p{margin-top:14px}
 /* ---------- form ---------- */
 .form-card{
   background:var(--branco);border:1px solid var(--borda);border-radius:17px;
-  padding:22px 18px;box-shadow:0 6px 22px rgba(43,39,34,.07);
+  padding:18px 16px;box-shadow:0 6px 22px rgba(43,39,34,.07);
 }
 .form-card h3{font-family:Fraunces,serif;font-size:1.18rem;font-weight:600;margin-bottom:5px}
 .form-card .nota{font-size:14px;color:var(--tinta-suave);margin-bottom:18px;line-height:1.45}
 label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px}
 input{
-  width:100%;padding:13px 14px;border-radius:10px;
+  width:100%;padding:12px 14px;border-radius:10px;
   border:1.5px solid var(--borda);background:#FFFDFA;color:var(--tinta);
   font-family:inherit;font-size:16px; /* 16px evita zoom no iOS */
 }
 input::placeholder{color:#B3A897}
 input:focus{outline:2px solid var(--noite);outline-offset:1px;border-color:transparent}
-.campo+.campo{margin-top:13px}
+.campo+.campo{margin-top:11px}
 .erro{color:#B3341F;font-size:13px;margin-top:9px;display:none}
 .hp{position:absolute;left:-9999px}
 .privacidade{font-size:12px;color:var(--tinta-suave);margin-top:13px;text-align:center;line-height:1.5}
@@ -163,11 +168,30 @@ input:focus{outline:2px solid var(--noite);outline-offset:1px;border-color:trans
 footer{padding:30px 0 40px;text-align:center;font-size:13px;color:var(--tinta-suave)}
 
 @media (min-width:620px){
+  .hero .wrap{display:block}
+  .promessa-depois{margin-top:0}
   section{padding:60px 0}
   .hero{padding:40px 0 52px}
   .temas{grid-template-columns:1fr 1fr}
   .form-card{padding:28px 26px}
   .selo{display:inline-block}
+}
+/* telas baixas (iPhone SE, Android pequeno): aperta para o botao caber */
+@media (max-width:619px) and (max-height:760px){
+  .hero{padding:10px 0 22px}
+  h1{font-size:1.45rem}
+  .promessa{font-size:.9rem;line-height:1.45;margin-top:9px}
+  .data{padding:9px 12px;margin:8px 0 13px;gap:10px}
+  .data .num{font-size:1.65rem}
+  .data .txt{font-size:12.5px}
+  .data .txt b{font-size:13.5px}
+  .form-card{padding:15px 14px}
+  .form-card h3{font-size:1.08rem}
+  label{font-size:12px;margin-bottom:5px}
+  input{padding:10px 13px}
+  .campo+.campo{margin-top:9px}
+  .btn{padding:14px 18px;font-size:16px}
+  .privacidade{margin-top:10px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 
@@ -206,7 +230,7 @@ footer{padding:30px 0 40px;text-align:center;font-size:13px;color:var(--tinta-su
       toda e atravessar cada fase que vem depois: desmame, desfralde e disciplina.
       Sem deixar chorando e sem rotina rígida.
     </p>
-    <p class="promessa">
+    <p class="promessa promessa-depois">
       <strong>Eu nunca fiz uma Black Friday.</strong> Esse ano eu vou fazer a primeira.
     </p>
 
