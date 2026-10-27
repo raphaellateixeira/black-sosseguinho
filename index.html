@@ -67,22 +67,13 @@ body{
 .wrap{width:100%;max-width:var(--max);margin:0 auto;padding:0 16px}
 section{padding:48px 0}
 h1,h2,.display{font-family:Fraunces,Georgia,serif;font-weight:600;line-height:1.15;letter-spacing:-.01em}
-h1{font-size:clamp(1.58rem,6.6vw,2.6rem)}
+h1{font-size:clamp(1.95rem,8vw,3rem)}
 h2{font-size:clamp(1.4rem,5.2vw,1.9rem);margin-bottom:14px}
 p+p{margin-top:14px}
 .dim{color:var(--tinta-suave)}
 
-/* ---------- barra topo ---------- */
-.bar{
-  background:var(--turquesa);color:var(--tinta);
-  display:flex;flex-wrap:wrap;gap:4px 12px;justify-content:center;align-items:center;
-  padding:12px 16px;text-align:center;
-}
-.bar b{font-family:Fraunces,serif;font-weight:700;font-size:15px;letter-spacing:.02em}
-.bar span{font-size:13px;color:#14544E;letter-spacing:.04em}
-
 /* ---------- hero ---------- */
-.hero{background:var(--creme-2);padding:14px 0 30px;border-bottom:1px solid var(--borda)}
+.hero{background:var(--creme-2);padding:22px 0 30px;border-bottom:1px solid var(--borda)}
 /* no mobile o formulario sobe: a frase "Eu nunca fiz..." vai para depois dele */
 .hero .wrap{display:flex;flex-direction:column}
 .hero h1{order:1}
@@ -179,7 +170,7 @@ footer{padding:30px 0 40px;text-align:center;font-size:13px;color:var(--tinta-su
 /* telas baixas (iPhone SE, Android pequeno): aperta para o botao caber */
 @media (max-width:619px) and (max-height:760px){
   .hero{padding:10px 0 22px}
-  h1{font-size:1.45rem}
+  h1{font-size:1.72rem}
   .promessa{font-size:.9rem;line-height:1.45;margin-top:9px}
   .data{padding:9px 12px;margin:8px 0 13px;gap:10px}
   .data .num{font-size:1.65rem}
@@ -212,11 +203,6 @@ footer{padding:30px 0 40px;text-align:center;font-size:13px;color:var(--tinta-su
 </style>
 </head>
 <body>
-
-<div class="bar">
-  <b>Black Sosseguinho</b>
-  <span>11 de novembro, ao vivo</span>
-</div>
 
 <!-- ============ HERO + FORM ============ -->
 <header class="hero">
