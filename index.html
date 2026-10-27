@@ -344,14 +344,59 @@ footer{padding:30px 0 40px;text-align:center;font-size:13px;color:var(--tinta-su
 
 <script>
 // ---------- UTMs e origem ----------
+// A UTM so existe na URL da PRIMEIRA visita. Se a pessoa sai e volta pelo
+// historico, ou abre o link do navegador do Instagram no Safari, os parametros
+// somem e o lead chegaria sem origem. Por isso guardamos na primeira visita.
 (function(){
+  var CHAVES = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+  var VALIDADE = 30 * 24 * 60 * 60 * 1000; // 30 dias
   var q = new URLSearchParams(location.search);
-  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){
-    var el = document.getElementById(k);
-    if (el) el.value = q.get(k) || '';
+
+  function ler(){
+    try {
+      var s = JSON.parse(localStorage.getItem('lp_origem') || 'null');
+      if (s && Date.now() - s.t < VALIDADE) return s.v;
+    } catch(e){}
+    return null;
+  }
+  function gravar(v){
+    try { localStorage.setItem('lp_origem', JSON.stringify({t: Date.now(), v: v})); } catch(e){}
+  }
+
+  var daUrl = {}, temAlgo = false;
+  CHAVES.forEach(function(k){
+    var val = q.get(k) || '';
+    daUrl[k] = val;
+    if (val) temAlgo = true;
   });
-  var r = document.getElementById('referrer');    if (r) r.value = document.referrer || '';
-  var l = document.getElementById('landing_url'); if (l) l.value = location.href;
+
+  // fbclid vira fbc, no formato que a Meta espera
+  var fbclid = q.get('fbclid');
+  if (fbclid) {
+    daUrl.fbc = 'fb.1.' + Date.now() + '.' + fbclid;
+    temAlgo = true;
+  }
+
+  var origem;
+  if (temAlgo) {                 // chegou com parametro: essa e a fonte de verdade
+    daUrl.ref = document.referrer || '';
+    daUrl.primeira_url = location.href;
+    gravar(daUrl);
+    origem = daUrl;
+  } else {                       // sem parametro: usa o que foi guardado antes
+    origem = ler() || {};
+  }
+
+  CHAVES.forEach(function(k){
+    var el = document.getElementById(k);
+    if (el) el.value = origem[k] || '';
+  });
+  if (origem.fbc) { try { document.cookie = '_fbc=' + origem.fbc + ';path=/;max-age=7776000'; } catch(e){} }
+
+  var r = document.getElementById('referrer');
+  if (r) r.value = document.referrer || origem.ref || '';
+  var l = document.getElementById('landing_url');
+  if (l) l.value = origem.primeira_url || location.href;
 })();
 
 // ---------- mascara de telefone ----------
