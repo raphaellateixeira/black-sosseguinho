@@ -241,6 +241,8 @@ footer{padding:30px 0 40px;text-align:center;font-size:13px;color:var(--tinta-su
         <input type="hidden" name="utm_campaign" id="utm_campaign">
         <input type="hidden" name="utm_content"  id="utm_content">
         <input type="hidden" name="utm_term"     id="utm_term">
+        <input type="hidden" name="utm_campaign_id" id="utm_campaign_id">
+        <input type="hidden" name="src"             id="src">
         <input type="hidden" name="referrer"     id="referrer">
         <input type="hidden" name="landing_url"  id="landing_url">
 
@@ -348,7 +350,7 @@ footer{padding:30px 0 40px;text-align:center;font-size:13px;color:var(--tinta-su
 // historico, ou abre o link do navegador do Instagram no Safari, os parametros
 // somem e o lead chegaria sem origem. Por isso guardamos na primeira visita.
 (function(){
-  var CHAVES = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+  var CHAVES = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','utm_campaign_id','src'];
   var VALIDADE = 30 * 24 * 60 * 60 * 1000; // 30 dias
   var q = new URLSearchParams(location.search);
 
@@ -391,6 +393,17 @@ footer{padding:30px 0 40px;text-align:center;font-size:13px;color:var(--tinta-su
     var el = document.getElementById(k);
     if (el) el.value = origem[k] || '';
   });
+
+  // Marcador de origem: a LP NUNCA manda utm_source vazio. Sem parametro na URL
+  // e sem nada guardado, assume "direto". Assim, linha com utm_source em branco
+  // na planilha e prova de que o lead nao veio desta pagina.
+  var src = document.getElementById('utm_source');
+  if (src && !src.value) {
+    src.value = 'direto';
+    var med = document.getElementById('utm_medium');
+    if (med && !med.value) med.value = document.referrer ? 'referral' : 'none';
+  }
+
   if (origem.fbc) { try { document.cookie = '_fbc=' + origem.fbc + ';path=/;max-age=7776000'; } catch(e){} }
 
   var r = document.getElementById('referrer');
@@ -465,7 +478,9 @@ document.getElementById('form').addEventListener('submit', function(ev){
     utm_medium:   v('utm_medium'),
     utm_campaign: v('utm_campaign'),
     utm_content:  v('utm_content'),
-    utm_term:     v('utm_term'),
+    utm_term:        v('utm_term'),
+    utm_campaign_id: v('utm_campaign_id'),
+    src:             v('src'),
     referrer:     v('referrer'),
     landing_url:  v('landing_url'),
     origem:       'lp-black-sosseguinho'
@@ -493,6 +508,15 @@ document.getElementById('form').addEventListener('submit', function(ev){
     body: new URLSearchParams(new FormData(form)).toString(),
     keepalive: true
   });
+
+  // 3) CAPI da Meta, server-side. O token vive na Netlify, nunca aqui.
+  //    Usa o mesmo event_id do Pixel para a Meta deduplicar os dois eventos.
+  fetch('/.netlify/functions/capi', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(lead),
+    keepalive: true
+  }).catch(function(){});
 
   comTimeout(Promise.allSettled([pN8N, pNetlify]))
   .then(function(){
